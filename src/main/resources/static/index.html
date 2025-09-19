@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -397,7 +397,7 @@
             <div class="hearts">💖💕💗</div>
             <div class="flowers">🌸🌺🌹</div>
 
-            <div class="letter">A veces me despierto y recuerdo tu ausencia, quisiera gritar, sufrir, dormirme de nuevo para levantarme y aceptarlo He tratado de renunciar a la idea de hacer cosas enloquecidas para llamar tu atención, ilusiones y esperanzas que no tengo que tener ante un rechazo tan estremecedor No fue una fantasía, y se sintió como una, un parpadeo entre tener tu mano y luego tu espalda Fue difícil esperar esos primeros días, me hice una ambición desmedida por tu respuesta ante mis gestos y ridiculeces mal llamadas Te espero, con nervios, con un temor que se mece entre pánico y manos frías, a veces solo es duda Dudo de si sigo durmiendo y al despertar estarás a mi lado para contarte lo tétrico que fue tu silencio y mi tortura por el.</div>
+            <div class="letter"></div>
         </div>
     </div>
 
@@ -493,6 +493,12 @@
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
+            fetch('/letter.json')
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('.letter').textContent = data.text;
+                });
+
             // Interruptor de tema
             const themeSwitch = document.getElementById('themeSwitch');
             themeSwitch.addEventListener('click', toggleTheme);
