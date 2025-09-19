@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tqm</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            animation: backgroundShift 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            0% { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); }
+            100% { background: linear-gradient(135deg, #ffb3ba 0%, #ffdfba 50%, #ffffba 100%); }
+        }
+
+        .container {
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 50px rgba(233, 30, 99, 0.1);
+            position: relative;
+            z-index: 2;
+            border: 3px solid #ffb6c1;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(233, 30, 99, 0.2);
+        }
+
+        .letter {
+            font-size: 24px;
+            line-height: 1.8;
+            color: #333;
+            text-align: justify;
+            position: relative;
+            animation: fadeInText 3s ease-in-out;
+        }
+
+        @keyframes fadeInText {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .letter::first-letter {
+            font-size: 48px;
+            font-weight: bold;
+            color: #e91e63;
+            float: left;
+            margin-right: 10px;
+            margin-top: -10px;
+            line-height: 1;
+        }
+
+        .hearts {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: #e91e63;
+            opacity: 0.6;
+        }
+
+        .flowers {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 30px;
+            color: #4caf50;
+            opacity: 0.7;
+        }
+
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            animation: float 6s linear infinite;
+        }
+
+        .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .heart:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .heart:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .heart:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .heart:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .heart:nth-child(7) { left: 70%; animation-delay: 1s; }
+        .heart:nth-child(8) { left: 80%; animation-delay: 2s; }
+        .heart:nth-child(9) { left: 90%; animation-delay: 3s; }
+        .heart:nth-child(10) { left: 15%; animation-delay: 4s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes floatFlowers {
+            0% { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+            10% { opacity: 0.6; transform: scale(1); }
+            90% { opacity: 0.6; transform: scale(1); }
+            100% { transform: translateY(-100px) rotate(180deg) scale(0.5); opacity: 0; }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .title {
+            text-align: center;
+            font-size: 32px;
+            color: #e91e63;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-family: 'Dancing Script', cursive;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1), 0 0 10px rgba(233, 30, 99, 0.3); }
+            100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1), 0 0 20px rgba(233, 30, 99, 0.6), 0 0 30px rgba(233, 30, 99, 0.3); }
+        }
+
+        .decorative-border {
+            border: 2px solid #ffb6c1;
+            border-radius: 15px;
+            padding: 20px;
+            background: linear-gradient(45deg, rgba(255, 182, 193, 0.1), rgba(255, 255, 255, 0.5));
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .flower {
+            position: absolute;
+            animation: floatFlowers 8s linear infinite;
+            font-size: 24px;
+            opacity: 0.6;
+        }
+
+        .star {
+            position: absolute;
+            animation: twinkle 4s linear infinite;
+            font-size: 16px;
+            color: #ffd700;
+        }
+
+        .flower:nth-child(1) { left: 5%; animation-delay: 0.5s; }
+        .flower:nth-child(2) { left: 25%; animation-delay: 2.5s; }
+        .flower:nth-child(3) { left: 45%; animation-delay: 1.5s; }
+        .flower:nth-child(4) { left: 65%; animation-delay: 3.5s; }
+        .flower:nth-child(5) { left: 85%; animation-delay: 0.8s; }
+
+        .star:nth-child(1) { left: 8%; top: 20%; animation-delay: 1s; }
+        .star:nth-child(2) { left: 28%; top: 40%; animation-delay: 3s; }
+        .star:nth-child(3) { left: 48%; top: 15%; animation-delay: 2s; }
+        .star:nth-child(4) { left: 68%; top: 35%; animation-delay: 0.5s; }
+        .star:nth-child(5) { left: 88%; top: 25%; animation-delay: 2.5s; }
+
+        /* Mariposas flotantes */
+        .butterfly {
+            position: absolute;
+            animation: butterflyFloat 12s linear infinite;
+            font-size: 18px;
+            opacity: 0.7;
+        }
+
+        @keyframes butterflyFloat {
+            0% { transform: translateY(100vh) translateX(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100px) translateX(50px) rotate(360deg); opacity: 0; }
+        }
+
+        .butterfly:nth-child(1) { left: 12%; animation-delay: 1s; }
+        .butterfly:nth-child(2) { left: 35%; animation-delay: 4s; }
+        .butterfly:nth-child(3) { left: 55%; animation-delay: 2s; }
+        .butterfly:nth-child(4) { left: 75%; animation-delay: 5s; }
+
+        /* Partículas flotantes */
+        .particle {
+            position: absolute;
+            animation: particleFloat 15s linear infinite;
+            font-size: 12px;
+            opacity: 0.4;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) translateX(0px); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-100px) translateX(30px); opacity: 0; }
+        }
+
+        .particle:nth-child(1) { left: 18%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 42%; animation-delay: 3s; }
+        .particle:nth-child(3) { left: 62%; animation-delay: 6s; }
+        .particle:nth-child(4) { left: 82%; animation-delay: 9s; }
+
+        /* Efecto de escritura */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid #e91e63;
+            white-space: nowrap;
+            animation: typing 4s steps(40, end), blink-caret 1s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #e91e63; }
+        }
+
+        /* Tema oscuro */
+        .dark-mode {
+            background: linear-gradient(135deg, #2c1810 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .dark-mode .container {
+            background: rgba(26, 26, 46, 0.95);
+            border-color: #ff6b9d;
+        }
+
+        .dark-mode .title {
+            color: #ff6b9d;
+        }
+
+        .dark-mode .letter {
+            color: #e2e8f0;
+        }
+
+        /* Interruptor de tema */
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .theme-switch:hover {
+            transform: scale(1.1);
+        }
+
+        /* Control de música */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
+        .music-control.paused {
+            opacity: 0.6;
+        }
+
+        /* Efecto de confeti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confettiFall 3s linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Efecto de lluvia de corazones */
+        .heart-rain {
+            position: absolute;
+            animation: heartRain 2s linear forwards;
+            font-size: 24px;
+            pointer-events: none;
+        }
+
+        @keyframes heartRain {
+            0% { transform: translateY(-20px) scale(0); opacity: 1; }
+            50% { transform: scale(1.2); }
+            100% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts">
+        <div class="heart">💖</div>
+        <div class="heart">💕</div>
+        <div class="heart">💗</div>
+        <div class="heart">💓</div>
+        <div class="heart">💝</div>
+        <div class="heart">💘</div>
+        <div class="heart">💞</div>
+        <div class="heart">💟</div>
+        <div class="heart">❣️</div>
+        <div class="heart">♥️</div>
+    </div>
+
+    <div class="floating-elements">
+        <div class="flower">🌸</div>
+        <div class="flower">🌺</div>
+        <div class="flower">🌹</div>
+        <div class="flower">🌷</div>
+        <div class="flower">🌼</div>
+        <div class="star">✨</div>
+        <div class="star">⭐</div>
+        <div class="star">✨</div>
+        <div class="star">⭐</div>
+        <div class="star">✨</div>
+        <!-- Mariposas -->
+        <div class="butterfly">🦋</div>
+        <div class="butterfly">🦋</div>
+        <div class="butterfly">🦋</div>
+        <div class="butterfly">🦋</div>
+        <!-- Partículas -->
+        <div class="particle">✿</div>
+        <div class="particle">❀</div>
+        <div class="particle">✾</div>
+        <div class="particle">❃</div>
+    </div>
+
+    <!-- Música de fondo romántica -->
+    <audio id="backgroundMusic" autoplay loop style="display: none;">
+        <source src="https://www.soundjay.com/misc/sounds/romantic-piano-02.wav" type="audio/wav">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
+    </audio>
+
+    <!-- Interruptor de tema -->
+    <button class="theme-switch" id="themeSwitch" title="Cambiar tema">🌙</button>
+
+    <!-- Control de música -->
+    <button class="music-control" id="musicControl" title="Pausar/Reproducir música">🎵</button>
+
+    <div class="container">
+        <div class="title">
+            Paula
+        </div>
+
+        <div class="decorative-border">
+            <div class="hearts">💖💕💗</div>
+            <div class="flowers">🌸🌺🌹</div>
+
+            <div class="letter" th:text="${letterText}"></div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let isDarkMode = false;
+        let confettiInterval;
+        let heartRainInterval;
+        let isMusicPlaying = true;
+
+        // Función para crear confeti
+        function createConfetti() {
+            const colors = ['#ff6b9d', '#c44569', '#f8b500', '#55c57a', '#ff3838'];
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 3 + 's';
+            document.body.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, 3000);
+        }
+
+        // Función para lluvia de corazones
+        function createHeartRain() {
+            const hearts = ['💖', '💕', '💗', '💓', '💝', '💘', '💞', '💟', '❣️', '♥️'];
+            const heart = document.createElement('div');
+            heart.className = 'heart-rain';
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 2000);
+        }
+
+        // Función para alternar tema
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            const body = document.body;
+            const themeSwitch = document.getElementById('themeSwitch');
+
+            if (isDarkMode) {
+                body.classList.add('dark-mode');
+                themeSwitch.textContent = '☀️';
+                themeSwitch.title = 'Cambiar a tema claro';
+            } else {
+                body.classList.remove('dark-mode');
+                themeSwitch.textContent = '🌙';
+                themeSwitch.title = 'Cambiar a tema oscuro';
+            }
+        }
+
+        // Función para iniciar confeti
+        function startConfetti() {
+            confettiInterval = setInterval(createConfetti, 200);
+            setTimeout(() => {
+                clearInterval(confettiInterval);
+            }, 5000);
+        }
+
+        // Función para iniciar lluvia de corazones
+        function startHeartRain() {
+            heartRainInterval = setInterval(createHeartRain, 300);
+            setTimeout(() => {
+                clearInterval(heartRainInterval);
+            }, 3000);
+        }
+
+        // Función para controlar música
+        function toggleMusic() {
+            const audio = document.getElementById('backgroundMusic');
+            const musicControl = document.getElementById('musicControl');
+
+            if (isMusicPlaying) {
+                audio.pause();
+                musicControl.textContent = '🔇';
+                musicControl.title = 'Reproducir música';
+                musicControl.classList.add('paused');
+            } else {
+                audio.play();
+                musicControl.textContent = '🎵';
+                musicControl.title = 'Pausar música';
+                musicControl.classList.remove('paused');
+            }
+
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Interruptor de tema
+            const themeSwitch = document.getElementById('themeSwitch');
+            themeSwitch.addEventListener('click', toggleTheme);
+
+            // Control de música
+            const musicControl = document.getElementById('musicControl');
+            musicControl.addEventListener('click', toggleMusic);
+
+            // Click en el contenedor para lluvia de corazones
+            const container = document.querySelector('.container');
+            container.addEventListener('click', startHeartRain);
+
+            // Efecto de confeti al cargar
+            setTimeout(startConfetti, 1000);
+
+            // Música de fondo con control de volumen
+            const audio = document.getElementById('backgroundMusic');
+            audio.volume = 0.3; // Volumen bajo
+
+            // Efecto typewriter para el título
+            const title = document.querySelector('.title');
+            title.classList.add('typewriter');
+
+            // Animación de entrada escalonada
+            const elements = document.querySelectorAll('.floating-hearts, .floating-elements, .container');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = index * 0.5 + 's';
+            });
+        });
+
+        // Efecto de hover en elementos flotantes
+        document.addEventListener('mousemove', function(e) {
+            const hearts = document.querySelectorAll('.heart, .flower, .star, .butterfly, .particle');
+            hearts.forEach(heart => {
+                const rect = heart.getBoundingClientRect();
+                const distance = Math.sqrt(
+                    Math.pow(e.clientX - (rect.left + rect.width / 2), 2) +
+                    Math.pow(e.clientY - (rect.top + rect.height / 2), 2)
+                );
+
+                if (distance < 50) {
+                    heart.style.transform = 'scale(1.5)';
+                    heart.style.opacity = '1';
+                } else {
+                    heart.style.transform = 'scale(1)';
+                    heart.style.opacity = '';
+                }
+            });
+        });
+
+        // Efecto de parallax en elementos flotantes
+        document.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+
+            const floatingElements = document.querySelectorAll('.floating-hearts, .floating-elements');
+            floatingElements.forEach(el => {
+                el.style.transform = `translateY(${rate}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

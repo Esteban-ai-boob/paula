@@ -1,0 +1,15 @@
+package com.paula.paula;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class WebController {
+
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("letterText", "A veces me despierto y recuerdo tu ausencia, quisiera gritar, sufrir, dormirme de nuevo para levantarme y aceptarlo He tratado de renunciar a la idea de hacer cosas enloquecidas para llamar tu atención, ilusiones y esperanzas que no tengo que tener ante un rechazo tan estremecedor No fue una fantasía, y se sintió como una, un parpadeo entre tener tu mano y luego tu espalda Fue difícil esperar esos primeros días, me hice una ambición desmedida por tu respuesta ante mis gestos y ridiculeces mal llamadas Te espero, con nervios, con un temor que se mece entre pánico y manos frías, a veces solo es duda Dudo de si sigo durmiendo y al despertar estarás a mi lado para contarte lo tétrico que fue tu silencio y mi tortura por el.");
+        return "index";
+    }
+}
